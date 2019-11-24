@@ -17,10 +17,13 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/categories', 'CategoryController@index')->name('category_list');
-Route::get('/category', 'CategoryController@create')->name('category_create');
-Route::post('/category', 'CategoryController@store')->name('category_store');
+Route::group(['middleware' => ['auth']], function() {
+    Route::get('/home', 'HomeController@index')->name('home');
+    Route::get('/categories', 'CategoryController@index')->name('category_list');
+    Route::get('/category', 'CategoryController@create')->name('category_create');
+    Route::post('/category', 'CategoryController@store')->name('category_store');
 
-Route::get('/upload', 'UploadController@create');
-Route::post('/upload', 'UploadController@upload')->name('upload_image');
+    Route::get('/upload', 'UploadController@create');
+    Route::post('/upload', 'UploadController@upload')->name('upload_image');
+});
+
