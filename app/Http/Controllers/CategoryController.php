@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Repositories\CategoryRepositoryInterface;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -9,13 +10,27 @@ use Illuminate\Support\Facades\Auth;
 class CategoryController extends Controller
 {
     /**
+     * @var CategoryRepositoryInterface $categoryRepository
+     */
+    private $categoryRepository;
+
+    /**
+     * CategoryController constructor.
+     * @param CategoryRepositoryInterface $categoryRepository
+     */
+    public function __construct(CategoryRepositoryInterface $categoryRepository)
+    {
+        $this->categoryRepository = $categoryRepository;
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        $categories = Auth::user()->categories()->get();
+        $categories = $this->categoryRepository->getUserCategories($this->getUser());
         return view('category.list', compact('categories'));
     }
 
